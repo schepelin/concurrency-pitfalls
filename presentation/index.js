@@ -56,6 +56,7 @@ const code = {
   raceConditionSleep: require("raw-loader!../assets/code/race_condition_sleep.go"),
   dataRace: require("raw-loader!../assets/code/data_race.go"),
   deadlock: require("raw-loader!../assets/code/deadlock.go"),
+  livelock: require("raw-loader!../assets/code/livelock.go"),
 }
 preloader(code)
 
@@ -88,10 +89,10 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={3} textColor="tertiary">Definition</Heading>
+          <Heading size={3} textColor="tertiary">Practical definition</Heading>
           <BlockQuote>
             <Quote>
-              More than one thread access the memory address and at least one of them is writing
+              Two or more threads access the memory address and at least one of them is writing
             </Quote>
           </BlockQuote>
         </Slide>
@@ -136,7 +137,7 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
-          <Heading size={3} textColor="tertiary">Definition</Heading>
+          <Heading size={3} textColor="tertiary">Practical definition</Heading>
           <BlockQuote>
             <Quote>
               Two or more operations must be executed in the correct order.<br/>
@@ -241,7 +242,43 @@ export default class Presentation extends React.Component {
           </BlockQuote>
         </Slide>
 
-        {/* last slide of a presentation */}
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Notes>
+            <p>Deadlock leads to complete stop of program execution.</p>
+            <p>In case of livelock a programm continues execution, but don't make progress</p>
+          </Notes>
+          <Heading size={3} textColor="tertiary">Livelock</Heading>
+          <Text textColor="primary">
+            Come across someone in a hallway
+          </Text>
+        </Slide>
+
+        <CodeSlide
+          bgColor="secondary"
+          color={colors.primary}
+          transition={["fade"]}
+          lang="clike"
+          code={code.livelock}
+          notes={`
+
+          `}
+          ranges={[
+            { loc: [10, 14], note: "Define an Eater struct" },
+            { loc: [22, 47], note: "EatWith method" },
+            { loc: [23, 24], note: "Until an Eater is hungry" },
+            { loc: [24, 28], note: "Wait if spoon is used by the second one" },
+            { loc: [29, 37], note: "An Eater is so polite. He always gives a favor for the second one" },
+            { loc: [38, 45], note: "Use the spoon if the second has already eaten" },
+
+            { loc: [73, 76], note: "Initialzie two eaters and the spoon" },
+            { loc: [77, 79], note: "Declare a wait group" },
+            { loc: [80, 84], note: "Run Bob" },
+            { loc: [85, 89], note: "Run Alice" },
+            { loc: [89, 90], note: "Wait for result (hope, it will finish some-time)" },
+          ]}
+        />
+
+        {/* last slide of the presentation */}
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
           <Heading size={3} textColor="primary">
             Questions?
