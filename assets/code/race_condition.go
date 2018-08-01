@@ -20,7 +20,7 @@ func NewAccount(balance int) *Account {
 }
 
 func (a *Account) Earn(amount int) {
-	// simulate hard work
+	// simulate fast operation
 	r := time.Duration(rand.Intn(10)) * time.Nanosecond
 	time.Sleep(r)
 
@@ -30,8 +30,8 @@ func (a *Account) Earn(amount int) {
 }
 
 func (a *Account) Spend(amount int) {
-	// simulate hard work
-	r := time.Duration(rand.Intn(10)) * time.Nanosecond
+	// simulate slow operation
+	r := time.Duration(rand.Intn(100)) * time.Nanosecond
 	time.Sleep(r)
 
 	a.m.Lock()

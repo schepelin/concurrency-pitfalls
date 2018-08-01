@@ -72,6 +72,10 @@ export default class Presentation extends React.Component {
       >
         {/* Title slide */}
         <Slide transition={["fade"]} bgColor="primary">
+          <Notes>
+            <p>To build good software you should be really hands-onn with a bad one</p>
+            <p>And be able to separate these two categories</p>
+          </Notes>
           <Heading size={1} fit caps lineHeight={1} textColor="secondary">
             Concurrency Pitfalls
           </Heading>
@@ -82,7 +86,7 @@ export default class Presentation extends React.Component {
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
           <Notes>
-            <p>Put the notes here</p>
+            <p>We start from the most popular pitfall – a data race</p>
           </Notes>
           <Heading size={3} textColor="tertiary">Data race</Heading>
           <Text textColor="primary">Concurrent access to a memory address</Text>
@@ -92,7 +96,7 @@ export default class Presentation extends React.Component {
           <Heading size={3} textColor="tertiary">Practical definition</Heading>
           <BlockQuote>
             <Quote>
-              Two or more threads access the memory address and at least one of them is writing
+              Two or more threads access the memory address and at least one of them does a write-operation
             </Quote>
           </BlockQuote>
         </Slide>
@@ -109,7 +113,7 @@ export default class Presentation extends React.Component {
             Critical section & atomicy
           `}
           ranges={[
-            { loc: [5, 12], note: "Non determenistic behavior" },
+            { loc: [5, 12], note: "Non deterministic behavior" },
             { loc: [5, 6], note: "Declare variable" },
             { loc: [6, 9], note: "Modify it in the goroutine" },
             { loc: [9, 12], note: "Read the variable and print the value" },
@@ -120,8 +124,9 @@ export default class Presentation extends React.Component {
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
           <Notes>
-            <p>The term critical section is tightly coupled with the concept of atomicy</p>
-            <p>mount</p>
+            <p>Critcal section – a block of code with exlusive access to a variable</p>
+            <p>A Critical Section term is tightly coupled with the concept of atomicy</p>
+            <p>Example: mount</p>
           </Notes>
           <Heading size={3} textColor="primary">i++</Heading>
         </Slide>
@@ -132,7 +137,7 @@ export default class Presentation extends React.Component {
           </Notes>
           <Heading size={3} textColor="tertiary">Race condition</Heading>
           <Text textColor="primary">
-            Operations execution order
+            Presumptive threads execution order
           </Text>
         </Slide>
 
@@ -140,8 +145,8 @@ export default class Presentation extends React.Component {
           <Heading size={3} textColor="tertiary">Practical definition</Heading>
           <BlockQuote>
             <Quote>
-              Two or more operations must be executed in the correct order.<br/>
-              But, the code doesn't guarantee that.
+              Two or more operations must be completed in a particular order to be done correctly.<br/>
+              But, a code doesn't guarantee that.
             </Quote>
           </BlockQuote>
         </Slide>
@@ -158,16 +163,16 @@ export default class Presentation extends React.Component {
           ranges={[
             { loc: [9, 13], note: "Account struct" },
             { loc: [21, 22], note: "Earn method" },
-            { loc: [23, 25], note: "Simulate latency" },
-            { loc: [26, 29], note: "Exclusivelly update balance" },
+            { loc: [23, 25], note: "Simulate low latency" },
+            { loc: [26, 29], note: "Exclusively update balance" },
 
             { loc: [31, 32], note: "Spend method" },
-            { loc: [33, 35], note: "Simulate latency" },
-            { loc: [36, 41], note: "Exclusivelly update balance" },
+            { loc: [33, 35], note: "It takes much longer that Earn" },
+            { loc: [36, 41], note: "Exclusively update balance" },
 
             { loc: [44, 45], note: "Create account" },
-            { loc: [47, 49], note: "Run Earcn and Spend. There is no data race" },
-            { loc: [52, 53], note: "Non determenistic behavior. Might be 20 or 150" },
+            { loc: [47, 49], note: "Run Earn and Spend. Most of the time it works" },
+            { loc: [52, 53], note: "But, the behavior is non-deterministic. Might be 20 or 150" },
           ]}
         />
 
@@ -217,9 +222,9 @@ export default class Presentation extends React.Component {
             { loc: [19, 32], note: "Money transfer method" },
             { loc: [20, 25], note: "Lock first account to eliminate data race" },
             { loc: [26, 29], note: "Lock second account to eliminate data race" },
-            { loc: [30, 31], note: "First account critical section is too long" },
+            { loc: [30, 31], note: "First account's critical section is too long" },
 
-            { loc: [34, 36], note: "Initialzie two accounts" },
+            { loc: [34, 36], note: "Initialize two accounts" },
             { loc: [37, 39], note: "Define a wait group" },
             { loc: [40, 44], note: "Alice transfers money to Bob" },
             { loc: [45, 49], note: "And, Bob transfers money to Alice at the same time" },
@@ -235,22 +240,44 @@ export default class Presentation extends React.Component {
           </Notes>
           <Heading size={3} textColor="tertiary">Coffman's conditions</Heading>
           <BlockQuote>
-            <Text textColor="primary" padding="0 0 7px 0">Mutual Exclusion Condition</Text>
-            <Text textColor="primary" padding="0 0 7px 0">Hold and Wait Condition</Text>
-            <Text textColor="primary" padding="0 0 7px 0">No-Preemptive Condition</Text>
-            <Text textColor="primary" padding="0 0 7px 0">Circular Wait Condition</Text>
+            <Text textColor="primary" padding="0 0 7px 0" bold >Mutual Exclusion Condition</Text>
+            <Text textColor="primary" padding="0 0 7px 0" bold>Hold and Wait Condition</Text>
+            <Text textColor="primary" padding="0 0 7px 0" bold>No-Preemptive Condition</Text>
+            <Text textColor="primary" padding="0 0 7px 0" bold>Circular Wait Condition</Text>
           </BlockQuote>
+
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <Text textAlign="right">
+            <Link
+              href="https://people.cs.umass.edu/~mcorner/courses/691J/papers/TS/coffman_deadlocks/coffman_deadlocks.pdf"
+              textColor="tertiary"
+            >
+              *Original Paper: System Deadlocks, 1971
+            </Link>
+          </Text>
         </Slide>
 
         <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
           <Notes>
             <p>Deadlock leads to complete stop of program execution.</p>
-            <p>In case of livelock a programm continues execution, but don't make progress</p>
+            <p>In case of livelock a programm continues execution, but don't make any progress</p>
           </Notes>
           <Heading size={3} textColor="tertiary">Livelock</Heading>
           <Text textColor="primary">
-            Come across someone in a hallway
+            Meet someone in a hallway
           </Text>
+        </Slide>
+
+        <Slide transition={["fade"]} bgColor="secondary" textColor="primary">
+          <Heading size={3} textColor="tertiary">Practical definition</Heading>
+          <BlockQuote>
+            <Quote>
+            The states of the processes involved in a livelock constantly change with regard to one another, none progressing.
+            </Quote>
+          </BlockQuote>
         </Slide>
 
         <CodeSlide
@@ -270,7 +297,7 @@ export default class Presentation extends React.Component {
             { loc: [29, 37], note: "An Eater is so polite. He always gives a favor for the second one" },
             { loc: [38, 45], note: "Use the spoon if the second has already eaten" },
 
-            { loc: [73, 76], note: "Initialzie two eaters and the spoon" },
+            { loc: [73, 76], note: "Initialize two eaters and the spoon" },
             { loc: [77, 79], note: "Declare a wait group" },
             { loc: [80, 84], note: "Run Bob" },
             { loc: [85, 89], note: "Run Alice" },
